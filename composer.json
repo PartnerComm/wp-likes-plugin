@@ -1,0 +1,17 @@
+{
+    "name": "pcomm/pcommlikes",
+    "version": "1.0.0",
+    "description": "PComm Likes",
+    "type": "wordpress-plugin",
+    "dist": {
+        "type": "git",
+        "url": "https://partnercomm.git.beanstalkapp.com/composer-wp-likes.git"
+    },
+    "authors": [
+        {
+            "name": "Partnercomm.net",
+            "email": "code@partnercomm.net"
+        }
+    ],
+    "require": {}
+}
