@@ -12,7 +12,7 @@ if (typeof PComm === "undefined") {
                     if(self.hasLike($(this).data('postId'))) {
                         $('.status', $(this)).removeClass('fa-heart-o').addClass('fa-heart');
                     }
-                }).click(this.doLike);
+                }).unbind('click').click(this.doLike);
             },
             saveLike: function(postId, like) {
                 var likes = this.getCookie();
@@ -52,10 +52,12 @@ if (typeof PComm === "undefined") {
                 return JSON.parse('[]');
             },
             doLike: function(ele) {
+                alert('clicker');
                 ele.preventDefault();
                 ele.stopPropagation();
                 var self = this;
                 var postId = $(this).data('postId');
+                var objectType = $(this).data('type');
                 var target = $(this);
                 var like = (PComm.likes.hasLike(postId)) ? -1 : 1;
                 $.ajax({
@@ -64,7 +66,8 @@ if (typeof PComm === "undefined") {
                     data: ({
                         action: 'like',
                         post: postId,
-                        like: like
+                        like: like,
+                        type: objectType
                     }),
                     success: function (data) {
                         $('span', target).html(data);

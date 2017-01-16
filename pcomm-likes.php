@@ -21,7 +21,7 @@ class PCommLikes {
         wp_enqueue_script('like-js', plugins_url('js/likes.js', __FILE__), array('jquery'), '', true);
         wp_localize_script('like-js', 'like_ajax', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
-            'domain'  => $_SERVER['HTTP_HOST']
+            'domain'  => $_SERVER['SERVER_NAME']
             )
         );
     }
@@ -29,12 +29,23 @@ class PCommLikes {
     public function like() {
         $post_id = $_POST['post'];
         $like = (int) $_POST['like'];
+        $type = $_POST['type'];
 
-        $current_likes = (int) get_post_meta($post_id, $this->prefix.'like_count', true);
-        $new_likes = $current_likes + $like;
+        if($type == 'comment') {
+            $current_likes = (int) get_comment_meta($post_id, $this->prefix.'like_count', true);
+            $new_likes = $current_likes + $like;
 
-        //set the post meta to the new values
-        update_post_meta($post_id, $this->prefix.'like_count', $new_likes);
+            //set the post meta to the new values
+            update_comment_meta($post_id, $this->prefix.'like_count', $new_likes);
+        } else {
+            $current_likes = (int) get_post_meta($post_id, $this->prefix.'like_count', true);
+            $new_likes = $current_likes + $like;
+
+            //set the post meta to the new values
+            update_post_meta($post_id, $this->prefix.'like_count', $new_likes);
+        }
+
+
         $result = $new_likes;
         echo ($result > -1) ? $result : 0;
         die();
