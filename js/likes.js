@@ -52,7 +52,6 @@ if (typeof PComm === "undefined") {
                 return JSON.parse('[]');
             },
             doLike: function(ele) {
-                alert('clicker');
                 ele.preventDefault();
                 ele.stopPropagation();
                 var self = this;
