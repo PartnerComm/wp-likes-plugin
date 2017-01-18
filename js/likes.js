@@ -69,12 +69,15 @@ if (typeof PComm === "undefined") {
                         type: objectType
                     }),
                     success: function (data) {
-                        $('span', target).html(data);
+                        console.log(data);
+                        $('span.count', target).html(data);
                         PComm.likes.saveLike(postId, like);
                         var faClass = (like == 1) ? 'fa-heart' : 'fa-heart-o';
+                        var likesText = (data == 1) ? 'like' : 'likes';
                         $('.status', $(self)).removeClass('fa-heart')
                             .removeClass('fa-heart-o')
                             .addClass(faClass);
+                        $('.likes-text', $(self)).text(likesText);
 
                     }
                 });
