@@ -69,7 +69,6 @@ if (typeof PComm === "undefined") {
                         type: objectType
                     }),
                     success: function (data) {
-                        console.log(data);
                         $('span.count', target).html(data);
                         PComm.likes.saveLike(postId, like);
                         var faClass = (like == 1) ? 'fa-heart' : 'fa-heart-o';
