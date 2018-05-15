@@ -2,7 +2,7 @@
 /*
 Plugin Name: Partnercomm Likes
 Description: Add likes to posts
-Version: 1.2.0
+Version: 1.2.2
 
 Usage, with defaults:
 do_shortcode('[pclikes post=' . $post->ID . ']')
