@@ -12,7 +12,13 @@ do_shortcode('[pclikes post=' . $post->ID . ' show_text=false fa_icon="thumbs-up
 ```
 
 ## Changelog
-**January 9, 2018**
+
+
+#### v.1.2
+
+* Removing Event Bubbling
+
+#### v.1.1
 
 * Changed 'likes' to 'like' on output text if only 1 like.
 * Added new attributes to shortcode

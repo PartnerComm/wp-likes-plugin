@@ -53,7 +53,7 @@ if (typeof PComm === "undefined") {
             },
             doLike: function(ele) {
                 ele.preventDefault();
-                ele.stopPropagation();
+                // ele.stopPropagation();
                 var self = this;
                 var postId = $(this).data('postId');
                 var objectType = $(this).data('type');
