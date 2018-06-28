@@ -10,7 +10,7 @@ if (typeof PComm === "undefined") {
                 var self = this;
                 $('.pcLikes').each(function(){
                     if(self.hasLike($(this).data('postId'))) {
-                        $('.status', $(this)).removeClass('fa-heart-o').addClass('fa-heart');
+                        $('.status', $(this)).removeClass('fa-heart-o').addClass('fa-heart liked');
                     }
                 }).unbind('click').click(this.doLike);
             },
@@ -53,7 +53,7 @@ if (typeof PComm === "undefined") {
             },
             doLike: function(ele) {
                 ele.preventDefault();
-                ele.stopPropagation();
+                // ele.stopPropagation();
                 var self = this;
                 var postId = $(this).data('postId');
                 var objectType = $(this).data('type');
@@ -69,10 +69,9 @@ if (typeof PComm === "undefined") {
                         type: objectType
                     }),
                     success: function (data) {
-                        console.log(data);
                         $('span.count', target).html(data);
                         PComm.likes.saveLike(postId, like);
-                        var faClass = (like == 1) ? 'fa-heart' : 'fa-heart-o';
+                        var faClass = (like == 1) ? 'fa-heart liked' : 'fa-heart-o';
                         var likesText = (data == 1) ? 'like' : 'likes';
                         $('.status', $(self)).removeClass('fa-heart')
                             .removeClass('fa-heart-o')

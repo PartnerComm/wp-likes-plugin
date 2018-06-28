@@ -2,10 +2,15 @@
 /*
 Plugin Name: Partnercomm Likes
 Description: Add likes to posts
-Version: 0.0.1
+Version: 1.2.2
 
-To Add: do_shortcode("[pclikes post='".get_the_ID()."']");
+Usage, with defaults:
+do_shortcode('[pclikes post=' . $post->ID . ']')
+
+Usage, hiding text and changing to thumbs up icon:
+do_shortcode('[pclikes post=' . $post->ID . ' show_text=false fa_icon="thumbs-up"]');
 */
+
 class PCommLikes {
 
     protected $prefix = "pc_";
@@ -20,8 +25,8 @@ class PCommLikes {
         add_shortcode('pclikes', [$this, 'getLikes']);
         wp_enqueue_script('like-js', plugins_url('js/likes.js', __FILE__), array('jquery'), '', true);
         wp_localize_script('like-js', 'like_ajax', array(
-            'ajaxurl' => admin_url('admin-ajax.php'),
-            'domain'  => $_SERVER['SERVER_NAME']
+                'ajaxurl' => admin_url('admin-ajax.php'),
+                'domain'  => $_SERVER['SERVER_NAME']
             )
         );
     }
@@ -52,17 +57,25 @@ class PCommLikes {
     }
 
     public function getLikes($atts) {
-        $atts = shortcode_atts(['post'=>0], $atts);
+        $atts = shortcode_atts([
+            'post'=>0,
+            'show_text' => true,
+            'fa_icon' => 'heart'
+        ], $atts);
         $post_id = (int) $atts['post'];
         if($post_id == 0) {
             echo 'Error Loading Likes';
         }
-        $current_likes = (int) get_post_meta($post_id, $this->prefix.'like_count', true);
 
-        echo "<a data-post-id='{$post_id}' class='pcLikes'>
+        $icon = $atts['fa_icon'];
+        $current_likes = (int) get_post_meta($post_id, $this->prefix.'like_count', true);
+        $like_text = $current_likes === 1 ? 'like' : 'likes';
+        $show_text = $atts['show_text'] === 1 ? '<span class="like-text">' . $like_text . '</span>' : '';
+
+        echo "<a data-post-id='{$post_id}' class='pcLikes' href='#'>
+                <i class='status fa fa-{$icon}' aria-hidden='true'></i>
                 <span class='count'>{$current_likes}</span> 
-                likes
-                <i class='status fa fa-heart-o' aria-hidden='true'></i>
+                {$show_text}
               </a>";
     }
 }
