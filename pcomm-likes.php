@@ -41,6 +41,7 @@ class PCommLikes
         $like = (int)$_POST['like'];
         $type = $_POST['type'];
         $date = new DateTime();
+        date_timezone_set($date, timezone_open('UTC'));
         $meta_key = $this->prefix . 'like_count';
         $meta_value = [
             'count' => 0,
@@ -82,18 +83,21 @@ class PCommLikes
 
         $icon = $atts['fa_icon'];
 
-        $show_date = '';
+        $show_date = $like_date_formatted = $like_date_utc = '';
 
         $meta_key = $this->prefix . 'like_count';
         $meta_value = get_post_meta($post_id, $meta_key, true);
         if (is_array($meta_value)) {
             $current_likes = (int)$meta_value['count'];
             $like_date = $meta_value['date'];
-            if ($like_date && $atts['show_date'] === 'true')
-                $show_date = '<span class="like-date">' . $like_date->format('m/d/Y h:i') . '</span>';
+            $like_date_utc = $like_date->format('U');
+            $like_date_formatted = $like_date->format('m/d/Y h:i');
         } else {
             $current_likes = (int)$meta_value;
         }
+
+        if ($atts['show_date'] === 'true')
+            $show_date = '<span class="like-date" data-timestamp="' . $like_date_utc . '">' . $like_date_formatted . '</span>';
 
         $like_text = $current_likes === 1 ? 'like' : 'likes';
 
