@@ -59,6 +59,7 @@ if (typeof PComm === "undefined") {
                 var objectType = $(this).data('type');
                 var target = $(this);
                 var like = (PComm.likes.hasLike(postId)) ? -1 : 1;
+
                 $.ajax({
                     type: "POST",
                     url: likeUrl,
@@ -76,9 +77,11 @@ if (typeof PComm === "undefined") {
                         $('.status', $(self)).removeClass('fa-heart')
                             .removeClass('fa-heart-o')
                             .addClass(faClass);
-                        $('.likes-text', $(self)).text(likesText);
-
-                    }
+                        $('.like-text', $(self)).text(likesText);
+                        const date = new Date;
+                        const dateFormatted = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
+                        like == 1 && $('.like-date').html(dateFormatted)
+                    },
                 });
             }
         }
