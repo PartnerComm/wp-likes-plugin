@@ -1,47 +1,54 @@
 if (typeof PComm === "undefined") {
     var PComm = {};
 }
-(function($){
-    PCLikes = function(){
+(function ($) {
+    PCLikes = function () {
         var likeUrl = like_ajax.ajaxurl;
         var likeDomain = like_ajax.domain;
         return {
-            init: function() {
+            init: function () {
                 var self = this;
-                $('.pcLikes').each(function(){
-                    if(self.hasLike($(this).data('postId'))) {
+                $('.pcLikes').each(function () {
+                    if (self.hasLike($(this).data('postId'))) {
                         $('.status', $(this)).removeClass('fa-heart-o').addClass('fa-heart liked');
+                    }
+                    var timestamp = $('.like-date', $(this)).data('timestamp');
+                    if (timestamp) {
+                        $('.like-date', this).html(self.formatDate(new Date(timestamp * 1000)))
                     }
                 }).unbind('click').click(this.doLike);
             },
-            saveLike: function(postId, like) {
+            formatDate: function (date) {
+                return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
+            },
+            saveLike: function (postId, like) {
                 var likes = this.getCookie();
                 var exists = false;
-                for(i = 0; i < likes.length; i++) {
-                    if(likes[i].postId == postId) {
+                for (i = 0; i < likes.length; i++) {
+                    if (likes[i].postId == postId) {
                         exists = true;
                         likes[i].like = like;
                     }
                 }
-                if(!exists) {
+                if (!exists) {
                     likes.push({
-                       postId: postId,
+                        postId: postId,
                         like: like
                     });
                 }
                 var data = JSON.stringify(likes);
-                document.cookie = "pclikes="+data+"; expires=Fri, 31 Dec 9999 23:59:59 GMT;domain=."+likeDomain+";path=/";
+                document.cookie = "pclikes=" + data + "; expires=Fri, 31 Dec 9999 23:59:59 GMT;domain=." + likeDomain + ";path=/";
             },
-            hasLike: function(postId) {
+            hasLike: function (postId) {
                 var likes = this.getCookie();
-                for(i = 0; i < likes.length; i++) {
-                    if(likes[i].postId == postId && likes[i].like == 1) {
+                for (i = 0; i < likes.length; i++) {
+                    if (likes[i].postId == postId && likes[i].like == 1) {
                         return true;
                     }
                 }
                 return false;
             },
-            getCookie: function() {
+            getCookie: function () {
                 var nameEQ = 'pclikes=';
                 var ca = document.cookie.split(';');
                 for (var i = 0; i < ca.length; i++) {
@@ -51,7 +58,7 @@ if (typeof PComm === "undefined") {
                 }
                 return JSON.parse('[]');
             },
-            doLike: function(ele) {
+            doLike: function (ele) {
                 ele.preventDefault();
                 // ele.stopPropagation();
                 var self = this;
@@ -78,9 +85,7 @@ if (typeof PComm === "undefined") {
                             .removeClass('fa-heart-o')
                             .addClass(faClass);
                         $('.like-text', $(self)).text(likesText);
-                        const date = new Date;
-                        const dateFormatted = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes();
-                        like == 1 && $('.like-date').html(dateFormatted)
+                        like == 1 && $('.like-date', target).html(PComm.likes.formatDate(new Date))
                     },
                 });
             }
